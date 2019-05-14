@@ -20,7 +20,7 @@ export default new Router({
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
-    }, 
+    },
     {
       path: '/canvas1',
       name: 'canvas1',
@@ -30,6 +30,21 @@ export default new Router({
       path: '/canvas2',
       name: 'canvas2',
       component: () => import('./views/canvas2.vue')
+    },
+    {
+      path: '/canvas3',
+      name: 'canvas3',
+      component: () => import('./views/canvas3.vue')
+    },
+    {
+      path: '/canvasGame',
+      name: 'canvasGame',
+      component: () => import('./views/canvasGame/canvasGa.vue')
+    },
+    {
+      path: '/com',
+      name: 'com',
+      component: () => import('./views/com')
     }
   ]
 })

@@ -6,6 +6,9 @@
       <router-link to="/about">call,apply</router-link> |
       <router-link to="/canvas1">canvas1</router-link> |
       <router-link to="/canvas2">canvas2</router-link> |
+      <router-link to="/canvas3">canvas3</router-link> |
+      <router-link to="/canvasGame">canvasGame</router-link> |
+      <router-link to="/com">com</router-link> |
     </div>
     <router-view/>
   </div>
