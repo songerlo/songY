@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <div>猜字母</div>
-    <canvas id="canvas2"></canvas>
-  </div>
+    <div>
+        <div>猜字母</div>
+        <canvas id="canvas2"></canvas>
+    </div>
 </template>
 
 <script>
