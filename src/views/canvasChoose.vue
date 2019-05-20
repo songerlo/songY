@@ -40,14 +40,15 @@ export default {
       flag = false
     })
     canvas.addEventListener('mousemove', function () {
-      console.log(n, m)
       if (flag) {
         let x = event.clientX - c.left * (canvas.width / c.width)
         let y = event.clientY - c.top * (canvas.height / c.height)
-        console.log(x, y)
+        ctx.strokeStyle = 'skyblue'
         ctx.beginPath()
         ctx.moveTo(n, m)
         ctx.lineTo(x, y)
+        n = x
+        m = y
         ctx.stroke()
       }
     })
