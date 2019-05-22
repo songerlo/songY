@@ -1,37 +1,32 @@
 <template>
     <div class="om" ref="om">
-        <canvas
-            id="canvas"
-        ></canvas>
-        <canvas
-            id="canvas1"
-        ></canvas>
-        <!-- <div class="xp">xxx</div> -->
+        <canvas id="canvas"></canvas>
+        <canvas id="canvas1"></canvas>
+        <div class="mm">
+            <div class="xp" @click="km(1)" :class="[index === 1 ? 'active':'']">1</div>
+            <div class="xp" @click="km(2)" :class="[index === 2 ? 'active':'']">2</div>
+            <div class="xp" @click="km(3)" :class="[index === 3 ? 'active':'']">3</div>
+        </div>
     </div>
 </template>
 
 <script>
-// function can () {
-//   var can = document.getElementById('canvas')
-//   var ctx = can.getContext('2d')
-//   can.width = 600
-//   can.height = 600
-//   //   lin(ctx, 40, can)
-//   lin(ctx, can)
-// }
-// function lin (ctx, can) {
-//   ctx.strokeStyle = 'red'
-//   for (let i = 1; i < can.height / 40; i++) {
-//     ctx.moveTo(0 - 0.5, 40 * i - 0.5)
-//     ctx.lineTo(can.height - 0.5, 40 * i - 0.5)
-//   }
-//   ctx.lineWidth = 1
-//   ctx.stroke()
-// }
-// can()
 export default {
+  data () {
+    return {
+      type: 1,
+      index: 1
+    }
+  },
+  methods: {
+    km (sm) {
+      this.type = sm
+      this.index = sm
+    }
+  },
   mounted () {
     // can();
+    console.log(this.type)
     let canvas = document.getElementById('canvas1')
     let ctx = canvas.getContext('2d')
     let can2 = document.getElementById('canvas')
@@ -46,41 +41,46 @@ export default {
     let x = 0
     let y = 0
     let sx = 0; let sy = 0; let sx1 = 0; let sy1 = 0
-    let type = 2
+    let that = this
     canvas.addEventListener('mousedown', function () {
       flag = true
-      n = event.clientX - c.left * (canvas.width / c.width)
-      m = event.clientY - c.top * (canvas.height / c.height)
-      sx = n
-      sy = m
+      sx = n = event.clientX - c.left * (canvas.width / c.width)
+      sy = m = event.clientY - c.top * (canvas.height / c.height)
     })
     canvas.addEventListener('mouseup', function () {
       flag = false
       ctx.clearRect(0, 0, w, h)
       sx1 = x = event.clientX - c.left * (canvas.width / c.width)
       sy1 = y = event.clientY - c.top * (canvas.height / c.height)
-    //   ctx2.beginPath()
-    //   ctx2.moveTo(sx, sy)
-    //   ctx2.lineTo(sx1, sy1)
-    //   ctx2.stroke()
+      if (that.type === 1) {
+        ctx2.beginPath()
+        ctx2.moveTo(sx, sy)
+        ctx2.lineTo(sx1, sy1)
+        ctx2.stroke()
+      }
+      if (that.type === 2) {
+        ctx2.strokeRect(sx, sy, x - n, y - m)
+      }
+      sx = sy = sx1 = sy1 = 0
     })
     canvas.addEventListener('mousemove', function () {
+      x = event.clientX - c.left * (canvas.width / c.width)
+      y = event.clientY - c.top * (canvas.height / c.height)
+      ctx.strokeStyle = 'skyblue'
       if (flag) {
-        var random = (Math.random() * 100)
-        if (type === 2) {
-          ctx2.clearRect(n, m, 100, 100)
-          ctx2.strokeRect(n, m, 100, 100)
+        if (that.type === 2) {
+          ctx.clearRect(0, 0, w, h)
+          ctx.strokeRect(sx, sy, x - n, y - m)
         }
-        x = event.clientX - c.left * (canvas.width / c.width)
-        y = event.clientY - c.top * (canvas.height / c.height)
-        ctx.strokeStyle = 'skyblue'
-        ctx.beginPath()
-        ctx.moveTo(n, m)
-        ctx.lineTo(x, y)
-        ctx.lineWidth = 3
-        n = x
-        m = y
-        ctx.stroke()
+        if (that.type === 1) {
+          ctx.beginPath()
+          ctx.moveTo(n, m)
+          ctx.lineTo(x, y)
+          ctx.lineWidth = 3
+          n = x
+          m = y
+          ctx.stroke()
+        }
       }
     })
   }
@@ -100,20 +100,27 @@ export default {
     top: 0;
     left: 0;
 }
+.mm {
+    position: absolute;
+    z-index: 1;
+    left: 100px;
+    top: 100px;
+}
 .xp {
     background: #000;
     color: #fff;
     line-height: 50px;
     text-align: center;
-    width: 120px;
-    position: absolute;
-    z-index: 1;
-    top: 30px;
-    left: 100px;
+    width: 50px;
     cursor: pointer;
-    border-radius: 10px;
+    float: left;
+    margin: 5px;
+    border-radius: 50%;
 }
 canvas {
     /* border: solid 1px #333; */
+}
+.active {
+    background: skyblue;
 }
 </style>
