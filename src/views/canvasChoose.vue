@@ -42,28 +42,12 @@ export default {
     let y = 0
     let sx = 0; let sy = 0; let sx1 = 0; let sy1 = 0
     let that = this
-    canvas.addEventListener('mousedown', function () {
+    canvas.onmousedown = function () {
       flag = true
       sx = n = event.clientX - c.left * (canvas.width / c.width)
       sy = m = event.clientY - c.top * (canvas.height / c.height)
-    })
-    canvas.addEventListener('mouseup', function () {
-      flag = false
-      ctx.clearRect(0, 0, w, h)
-      sx1 = x = event.clientX - c.left * (canvas.width / c.width)
-      sy1 = y = event.clientY - c.top * (canvas.height / c.height)
-      if (that.type === 1) {
-        ctx2.beginPath()
-        ctx2.moveTo(sx, sy)
-        ctx2.lineTo(sx1, sy1)
-        ctx2.stroke()
-      }
-      if (that.type === 2) {
-        ctx2.strokeRect(sx, sy, x - n, y - m)
-      }
-      sx = sy = sx1 = sy1 = 0
-    })
-    canvas.addEventListener('mousemove', function () {
+    }
+    canvas.onmousemove = function () {
       x = event.clientX - c.left * (canvas.width / c.width)
       y = event.clientY - c.top * (canvas.height / c.height)
       ctx.strokeStyle = 'skyblue'
@@ -82,6 +66,64 @@ export default {
           ctx.stroke()
         }
       }
+    }
+    canvas.onmouseup = function () {
+      flag = false
+      ctx.clearRect(0, 0, w, h)
+      sx1 = x = event.clientX - c.left * (canvas.width / c.width)
+      sy1 = y = event.clientY - c.top * (canvas.height / c.height)
+      if (that.type === 1) {
+        ctx2.beginPath()
+        ctx2.moveTo(sx, sy)
+        ctx2.lineTo(sx1, sy1)
+        ctx2.stroke()
+      }
+      if (that.type === 2) {
+        ctx2.strokeRect(sx, sy, x - n, y - m)
+      }
+      sx = sy = sx1 = sy1 = 0
+    }
+
+    canvas.addEventListener('touchstart', function () {
+      flag = true
+      sx = n = event.clientX - c.left * (canvas.width / c.width)
+      sy = m = event.clientY - c.top * (canvas.height / c.height)
+    })
+    canvas.addEventListener('touchmove', function () {
+      x = event.clientX - c.left * (canvas.width / c.width)
+      y = event.clientY - c.top * (canvas.height / c.height)
+      ctx.strokeStyle = 'skyblue'
+      if (flag) {
+        if (that.type === 2) {
+          ctx.clearRect(0, 0, w, h)
+          ctx.strokeRect(sx, sy, x - n, y - m)
+        }
+        if (that.type === 1) {
+          ctx.beginPath()
+          ctx.moveTo(n, m)
+          ctx.lineTo(x, y)
+          ctx.lineWidth = 3
+          n = x
+          m = y
+          ctx.stroke()
+        }
+      }
+    })
+    canvas.addEventListener('touchend', function () {
+      flag = false
+      ctx.clearRect(0, 0, w, h)
+      sx1 = x = event.clientX - c.left * (canvas.width / c.width)
+      sy1 = y = event.clientY - c.top * (canvas.height / c.height)
+      if (that.type === 1) {
+        ctx2.beginPath()
+        ctx2.moveTo(sx, sy)
+        ctx2.lineTo(sx1, sy1)
+        ctx2.stroke()
+      }
+      if (that.type === 2) {
+        ctx2.strokeRect(sx, sy, x - n, y - m)
+      }
+      sx = sy = sx1 = sy1 = 0
     })
   }
 }
