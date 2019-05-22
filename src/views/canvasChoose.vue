@@ -26,7 +26,6 @@ export default {
   },
   mounted () {
     // can();
-    console.log(this.type)
     let canvas = document.getElementById('canvas1')
     let ctx = canvas.getContext('2d')
     let can2 = document.getElementById('canvas')
@@ -83,15 +82,19 @@ export default {
       }
       sx = sy = sx1 = sy1 = 0
     }
-
-    canvas.addEventListener('touchstart', function () {
+    let touch
+    canvas.addEventListener('touchstart', function (e) {
+      e.preventDefault()
       flag = true
-      sx = n = event.clientX - c.left * (canvas.width / c.width)
-      sy = m = event.clientY - c.top * (canvas.height / c.height)
+      touch = e.touches[0]
+      sx = n = touch.pageX
+      sy = m = touch.pageY
     })
-    canvas.addEventListener('touchmove', function () {
-      x = event.clientX - c.left * (canvas.width / c.width)
-      y = event.clientY - c.top * (canvas.height / c.height)
+    canvas.addEventListener('touchmove', function (e) {
+      e.preventDefault()
+      touch = e.touches[0]
+      x = touch.pageX
+      y = touch.pageY
       ctx.strokeStyle = 'skyblue'
       if (flag) {
         if (that.type === 2) {
@@ -109,11 +112,12 @@ export default {
         }
       }
     })
-    canvas.addEventListener('touchend', function () {
+    canvas.addEventListener('touchend', function (e) {
+      e.preventDefault()
       flag = false
       ctx.clearRect(0, 0, w, h)
-      sx1 = x = event.clientX - c.left * (canvas.width / c.width)
-      sy1 = y = event.clientY - c.top * (canvas.height / c.height)
+      sx1 = x
+      sy1 = y
       if (that.type === 1) {
         ctx2.beginPath()
         ctx2.moveTo(sx, sy)
