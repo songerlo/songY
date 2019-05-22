@@ -3,6 +3,7 @@
         <canvas id="canvas"></canvas>
         <canvas id="canvas1"></canvas>
         <div class="mm">
+            <div class="xp" @click="clear">0</div>
             <div class="xp" @click="km(1)" :class="[index === 1 ? 'active':'']">1</div>
             <div class="xp" @click="km(2)" :class="[index === 2 ? 'active':'']">2</div>
             <div class="xp" @click="km(3)" :class="[index === 3 ? 'active':'']">3</div>
@@ -22,6 +23,13 @@ export default {
     km (sm) {
       this.type = sm
       this.index = sm
+    },
+    clear () {
+      let can2 = document.getElementById('canvas')
+      let ctx2 = can2.getContext('2d')
+      let w = this.$refs.om.clientWidth
+      let h = this.$refs.om.clientHeight
+      ctx2.clearRect(0, 0, w, h)
     }
   },
   mounted () {
