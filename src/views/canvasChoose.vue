@@ -2,7 +2,7 @@
     <div class="om" ref="om">
         <canvas id="canvas"></canvas>
         <canvas id="canvas1"></canvas>
-        <div class="slider" @click="slide">kk</div>
+        <!-- <div class="slider" @click="slide">kk</div> -->
         <div class="mm" v-show="isOpen" ref="m">
             <div class="xp" @click="clear">0</div>
             <div class="xp" @click="km(1)" :class="[index === 1 ? 'active':'']">1</div>
@@ -151,6 +151,15 @@ export default {
           n = x
           m = y
           ctx.stroke()
+        }
+        if (that.type === 3) {
+          ctx2.beginPath()
+          ctx2.moveTo(n, m)
+          ctx2.lineTo(x, y)
+          ctx2.lineWidth = 1
+          n = x
+          m = y
+          ctx2.stroke()
         }
       }
     })
