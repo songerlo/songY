@@ -2,7 +2,8 @@
     <div class="om" ref="om">
         <canvas id="canvas"></canvas>
         <canvas id="canvas1"></canvas>
-        <div class="mm">
+        <div class="slider" @click="slide">kk</div>
+        <div class="mm" v-show="isOpen" ref="m">
             <div class="xp" @click="clear">0</div>
             <div class="xp" @click="km(1)" :class="[index === 1 ? 'active':'']">1</div>
             <div class="xp" @click="km(2)" :class="[index === 2 ? 'active':'']">2</div>
@@ -16,7 +17,8 @@ export default {
   data () {
     return {
       type: 1,
-      index: 1
+      index: 1,
+      isOpen: true
     }
   },
   methods: {
@@ -30,6 +32,20 @@ export default {
       let w = this.$refs.om.clientWidth
       let h = this.$refs.om.clientHeight
       ctx2.clearRect(0, 0, w, h)
+    },
+    slide () {
+      this.isOpen = !this.isOpen
+      var div = this.$refs.m.children
+      for (var i = 0; i < div.length; i++) {
+        div[i].style.transform = `translateX(${i * -60}px)`
+      }
+    //   var timer = setInterval(() => {
+    //     for (var i = 0; i < div.length; i++) {
+    //       console.log(div[i].style.transform)
+    //     //   div[i].style.transform = `translateX(${i * -60}px)`
+    //     }
+    //   }, 50)
+    //   clearInterval(timer)
     }
   },
   mounted () {
@@ -72,6 +88,15 @@ export default {
           m = y
           ctx.stroke()
         }
+        if (that.type === 3) {
+          ctx2.beginPath()
+          ctx2.moveTo(n, m)
+          ctx2.lineTo(x, y)
+          ctx2.lineWidth = 1
+          n = x
+          m = y
+          ctx2.stroke()
+        }
       }
     }
     canvas.onmouseup = function () {
@@ -88,6 +113,15 @@ export default {
       if (that.type === 2) {
         ctx2.strokeRect(sx, sy, x - n, y - m)
       }
+      //   if (that.type === 3) {
+      //     ctx.beginPath()
+      //     ctx.moveTo(n, m)
+      //     ctx.lineTo(x, y)
+      //     ctx.lineWidth = 3
+      //     n = x
+      //     m = y
+      //     ctx.stroke()
+      //   }
       sx = sy = sx1 = sy1 = 0
     }
     let touch
@@ -176,5 +210,15 @@ canvas {
 }
 .active {
     background: skyblue;
+}
+.slider {
+    background: #000;
+    color: #fff;
+    line-height: 50px;
+    text-align: center;
+    width: 50px;
+    position: fixed;
+    left: 80px;
+    top: 30px;
 }
 </style>

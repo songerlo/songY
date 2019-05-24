@@ -45,22 +45,7 @@ export default {
       x = this.x = e.clientX
       y = this.y = e.clientY
       color = 'red'
-
-      // for(var i= 0; i< 10 ; i++){
-      //   this.a.push(new Particle({x,y,color}))
-      // }
     })
-    // window.addEventListener('click', (e) => {
-    //   e.preventDefault()
-    //   // let moveX =
-    //   var x,y,color
-    //   x = e.clientX
-    //   y = e.clientY
-    //   color = 'red'
-    //   for(var i= 0; i< 30 ; i++){
-    //     this.a.push(new Particle({x,y,color}))
-    //   }
-    // })
   },
   methods: {
     animated () {
