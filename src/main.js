@@ -4,7 +4,9 @@ import router from './router'
 import store from './store'
 import Elment from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import axios from 'axios'
 
+Vue.prototype.$m = axios
 Vue.use(Elment)
 Vue.config.productionTip = false
 

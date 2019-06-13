@@ -50,6 +50,11 @@ export default new Router({
       path: '/canvasChoose',
       name: 'canvasChoose',
       component: () => import('./views/canvasChoose')
+    },
+    {
+      path: '/imgCanvas',
+      name: 'imgCanvas',
+      component: () => import('./views/imgCanvas')
     }
   ]
 })

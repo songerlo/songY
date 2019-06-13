@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <div @click="chang">改变</div>
     <HelloWorld msg="Vue.js"/>
   </div>
 </template>
@@ -12,6 +13,21 @@ export default {
   name: 'home',
   components: {
     HelloWorld
+  },
+  data () {
+    return {
+      name: 'sss'
+    }
+  },
+  methods: {
+    chang () {
+      this.name = this.name === 'songduoduo' ? 'wangyuming' : 'songduoduo'
+    }
+  },
+  provide () {
+    return {
+      theme: this
+    }
   }
 }
 </script>

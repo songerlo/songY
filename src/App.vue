@@ -10,6 +10,7 @@
       <router-link to="/canvasGame">canvasGame</router-link> |
       <router-link to="/com">com</router-link> |
       <router-link to="/canvasChoose">canvasChoose</router-link> |
+      <router-link to="/imgCanvas">imgCanvas</router-link> |
     </div>
     <router-view/>
   </div>

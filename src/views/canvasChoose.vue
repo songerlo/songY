@@ -2,13 +2,17 @@
     <div class="om" ref="om">
         <canvas id="canvas"></canvas>
         <canvas id="canvas1"></canvas>
-        <!-- <div class="slider" @click="slide">kk</div> -->
+        <div class="slider" @click="slide">slide</div>
         <div class="mm" v-show="isOpen" ref="m">
-            <div class="xp" @click="clear">0</div>
-            <div class="xp" @click="km(1)" :class="[index === 1 ? 'active':'']">1</div>
-            <div class="xp" @click="km(2)" :class="[index === 2 ? 'active':'']">2</div>
-            <div class="xp" @click="km(3)" :class="[index === 3 ? 'active':'']">3</div>
+            <div class="xp" @click="clear">clear</div>
+            <div class="xp" @click="km(1)" :class="[index === 1 ? 'active':'']">line</div>
+            <div class="xp" @click="km(2)" :class="[index === 2 ? 'active':'']">square</div>
+            <div class="xp" @click="km(3)" :class="[index === 3 ? 'active':'']">custom</div>
+            <div class="xp" @click="km(4)" :class="[index === 4 ? 'active':'']">round</div>
+            <div class="xp" @click="km(5)" :class="[index === 5 ? 'active':'']">clearJuBu</div>
         </div>
+        <div @click="getApi()" class="axios">axios</div>
+        <img :src="url"/>
     </div>
 </template>
 
@@ -18,10 +22,28 @@ export default {
     return {
       type: 1,
       index: 1,
-      isOpen: true
+      isOpen: true,
+      url: ''
     }
   },
   methods: {
+    getApi () {
+      this.$m.get('/qrcode/api', { params: {
+        key: '934b96f0fba8ca31fd5aa4365eee4345',
+        text: 'songer',
+        bgColor: 'ffffff',
+        type: 1
+      } }).then(res => {
+        if (res.status === 200 && res.data.reason === 'success') {
+          return res.data.result
+        }
+      }).then(res => {
+        console.log(res)
+        this.url = 'data:image/png;base64,' + res.base64_image
+      }).catch(err => {
+        console.log(err + 'sssss')
+      })
+    },
     km (sm) {
       this.type = sm
       this.index = sm
@@ -34,18 +56,20 @@ export default {
       ctx2.clearRect(0, 0, w, h)
     },
     slide () {
-      this.isOpen = !this.isOpen
       var div = this.$refs.m.children
+      this.isOpen = !this.isOpen
       for (var i = 0; i < div.length; i++) {
-        div[i].style.transform = `translateX(${i * -60}px)`
+        div[i].style.transform = `translateX(${i * -60}px)`;
+        (function (i) {
+          setTimeout(() => {
+            console.log(i)
+            div[i].style.transform = `translateX(0px)`
+            div[i].style.transition = `all .2s linear`
+          }, 200)
+        })(i)
+        // }
       }
-    //   var timer = setInterval(() => {
-    //     for (var i = 0; i < div.length; i++) {
-    //       console.log(div[i].style.transform)
-    //     //   div[i].style.transform = `translateX(${i * -60}px)`
-    //     }
-    //   }, 50)
-    //   clearInterval(timer)
+      // this.isOpen = !this.isOpen
     }
   },
   mounted () {
@@ -65,7 +89,9 @@ export default {
     let y = 0
     let sx = 0; let sy = 0; let sx1 = 0; let sy1 = 0
     let that = this
+    let date = 0
     canvas.onmousedown = function () {
+      date = new Date()
       flag = true
       sx = n = event.clientX - c.left * (canvas.width / c.width)
       sy = m = event.clientY - c.top * (canvas.height / c.height)
@@ -74,10 +100,25 @@ export default {
       x = event.clientX - c.left * (canvas.width / c.width)
       y = event.clientY - c.top * (canvas.height / c.height)
       ctx.strokeStyle = 'skyblue'
+      if (that.type === 5) {
+        ctx.clearRect(0, 0, w, h)
+        ctx.beginPath()
+        ctx.arc(x, y, 50, 0, Math.PI * 2)
+        ctx.fill()
+        ctx.closePath()
+      }
       if (flag) {
         if (that.type === 2) {
           ctx.clearRect(0, 0, w, h)
           ctx.strokeRect(sx, sy, x - n, y - m)
+        }
+        if (that.type === 4) {
+          ctx.clearRect(0, 0, w, h)
+          ctx.lineWidth = 1
+          ctx.beginPath()
+          ctx.arc(x, y, Math.abs(((x + y) - (n + m)) / 2), 0, Math.PI * 2)
+          ctx.stroke()
+          ctx.closePath()
         }
         if (that.type === 1) {
           ctx.beginPath()
@@ -97,9 +138,14 @@ export default {
           m = y
           ctx2.stroke()
         }
+        if (that.type === 5) {
+          console.log(x, y)
+          ctx2.clearRect(x - 50, y - 50, 50, 50)
+        }
       }
     }
     canvas.onmouseup = function () {
+      date = new Date().getTime() - date.getTime()
       flag = false
       ctx.clearRect(0, 0, w, h)
       sx1 = x = event.clientX - c.left * (canvas.width / c.width)
@@ -113,15 +159,12 @@ export default {
       if (that.type === 2) {
         ctx2.strokeRect(sx, sy, x - n, y - m)
       }
-      //   if (that.type === 3) {
-      //     ctx.beginPath()
-      //     ctx.moveTo(n, m)
-      //     ctx.lineTo(x, y)
-      //     ctx.lineWidth = 3
-      //     n = x
-      //     m = y
-      //     ctx.stroke()
-      //   }
+      if (that.type === 4) {
+        ctx2.beginPath()
+        ctx2.arc(x, y, Math.abs(((x + y) - (n + m)) / 2), 0, Math.PI * 2)
+        ctx2.stroke()
+        ctx2.closePath()
+      }
       sx = sy = sx1 = sy1 = 0
     }
     let touch
@@ -227,7 +270,18 @@ canvas {
     text-align: center;
     width: 50px;
     position: fixed;
-    left: 80px;
-    top: 30px;
+    left: 0px;
+    top: 0px;
+    z-index: 1;
+}
+.axios {
+    position: fixed;
+    z-index: 2;
+    background: #f60;
+    color: #fff;
+    text-align: center;
+    width: 120px;
+    line-height: 40px;
+    top: 200px;
 }
 </style>

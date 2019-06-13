@@ -1,5 +1,6 @@
 <template>
   <div class="hello">
+    <div>{{ theme.name }}</div>
     <h1>{{ msg }}</h1>
     <input type="text" id="inp">
   </div>
@@ -7,43 +8,51 @@
 
 <script>
 // console.log(m.say());
-// 防抖 和节流 
+// 防抖 和节流
 // 参考地址： https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/5
 export default {
-  name: 'HelloWorld',
+  inject: {
+    theme: {
+      default: () => ({})
+    }
+  },
   props: {
     msg: String
   },
-  methods:{
-    debounce(fn) {
+  data () {
+    return {
+    }
+  },
+  methods: {
+    debounce (fn) {
       let timer = null
       return function () {
-        clearTimeout(timer);
+        clearTimeout(timer)
         timer = setTimeout(() => {
           fn.apply(this, arguments)
-        }, 500);
+        }, 500)
       }
     },
-    say() {
-      console.log('1');
+    say () {
+      console.log('1')
     },
-    throttle(fn) {
-      let canRun = true;
-      return function (){
-        if(!canRun) return;
-        canRun = false;
+    throttle (fn) {
+      let canRun = true
+      return function () {
+        if (!canRun) return
+        canRun = false
         setTimeout(() => {
           fn.apply(this, arguments)
           canRun = true
-        }, 1000);
+        }, 1000)
       }
     },
-    sayM(e) {
-      console.log(e);
-      console.log(e.target.innerWidth, e.target.innerHeight);
+    sayM (e) {
+      console.log(e)
+      console.log(e.target.innerWidth, e.target.innerHeight)
     }
   },
-  mounted() {
+  mounted () {
     var inp = document.getElementById('inp')
     inp.addEventListener('input', this.debounce(this.say))
     window.addEventListener('resize', this.throttle(this.sayM))
