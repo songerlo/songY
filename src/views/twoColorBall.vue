@@ -1,20 +1,55 @@
 <template>
     <div>
         <h1>twoColorBalls</h1>
-        <h2>{{historyList.num}}</h2>
-        <!-- <h3>{{ addArr.length }}</h3> -->
-        <div>
+        <h2>{{historyList.num}}条数据</h2>
+        <h3>{{ addArr.length }}个数</h3>
+        <el-button @click="add">添加50条数据</el-button>
+        <div style="margin-top: 30px;">
             <div v-for="(i, d) in Object.keys(appearNum)" :key="d" class="text" @click='active'>
                 <div>出现过的：{{ i | mon}}</div>
                 <div>次数：{{ appearNum[i] | mon}}</div>
                 <div>机率：{{ appearNum[i] | probability}}</div>
             </div>
         </div>
-        <div class="original">{{ addArr }}</div>
+        <canvas id="canvas"></canvas>
+        <!-- <div class="original">{{ addArr }}</div> -->
     </div>
 </template>
 
 <script>
+function dra (arr) {
+  var can = document.getElementById('canvas')
+  var ctx = can.getContext('2d')
+  can.width = 800
+  can.height = 400
+  var spa = 10
+  var ratio = 20
+  var diff = 10
+  spa = can.width / arr.length
+  ratio = can.height / 18
+  ctx.font = '14px Georgia'
+  //   ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
+  for (var i = 0; i < arr.length; i++) {
+    ctx.beginPath()
+    ctx.moveTo(spa * i, converNum(arr[i], ratio))
+    ctx.lineTo(spa * (i + 1), converNum(arr[i + 1], ratio))
+    ctx.stroke()
+    ctx.beginPath()
+    ctx.fillStyle = '#999'
+    if (arr[i] < arr[i + 1]) {
+      diff = -diff
+    } else {
+      diff = Math.abs(diff)
+    }
+    ctx.fillText(arr[i], spa * i - Math.abs(diff), converNum(arr[i], ratio) - diff)
+    ctx.arc(spa * i, converNum(arr[i], ratio), 3, 0, 2 * Math.PI)
+    ctx.fill()
+  }
+}
+function converNum (num, a) {
+  return 400 - (+num) * a
+}
 const key = '1e8ff909b13eda6ad2a18518bcbc584c'
 export default {
   filters: {
@@ -39,6 +74,10 @@ export default {
     }
   },
   methods: {
+    add () {
+      this.page = this.page + 1
+      this.getLottery()
+    },
     active (e) {
       e.currentTarget.className += ' active'
     },
@@ -67,15 +106,10 @@ export default {
           }
         })
         .then(data => {
-          this.historyList.list.concat(data.result.lotteryResList)
-          localStorage.setItem('historyList', JSON.stringify(data.result.lotteryResList))
-          localStorage.setItem('num', data.result.pageSize)
-          this.historyList.list = JSON.parse(localStorage.getItem('historyList'))
-          this.historyList.num = localStorage.getItem('num')
-        //   if (this.page === 1) {
-        //     this.page = 2
-        //     this.getLottery()
-        //   }
+          this.historyList.list = this.historyList.list.concat(data.result.lotteryResList)
+          this.historyList.num = this.historyList.list.length
+          localStorage.setItem('historyList', JSON.stringify(this.historyList.list))
+          localStorage.setItem('num', this.historyList.list.length)
         })
     }
   },
@@ -102,19 +136,28 @@ export default {
     }
   },
   beforeMount () {
-    if (JSON.parse(localStorage.getItem('list')).length === 0) {
-      this.getlist()
-    } else {
-      this.list = JSON.parse(localStorage.getItem('list'))
-    }
+    // if (JSON.parse(localStorage.getItem('list')).length === 0) {
+    //   this.getlist()
+    // } else {
+    //   this.list = JSON.parse(localStorage.getItem('list'))
+    // }
 
-    if (JSON.parse(localStorage.getItem('historyList')).length === 0) {
+    if (JSON.parse(localStorage.getItem('historyList')) === null) {
       this.getLottery()
     } else {
       this.historyList.list = JSON.parse(localStorage.getItem('historyList'))
-      this.historyList.num = localStorage.getItem('num')
+      this.historyList.num = this.historyList.list.length
     }
     // this.getLottery()
+  },
+  mounted () {
+    var arr = []
+    if (this.historyList.list.length > 0) {
+      this.historyList.list.map(item => {
+        arr.push(item.lottery_res.slice(-2))
+      })
+      dra(arr)
+    }
   }
 }
 </script>
@@ -138,5 +181,9 @@ export default {
     background: green;
     color: #fff;
     padding: 10px;
+}
+#canvas {
+    border: solid 1px #ddd;
+    margin: 60px 0;
 }
 </style>
