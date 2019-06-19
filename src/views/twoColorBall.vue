@@ -11,7 +11,9 @@
                 <div>机率：{{ appearNum[i] | probability}}</div>
             </div>
         </div>
-        <canvas id="canvas"></canvas>
+        <div class="canvasBox">
+            <canvas id="canvas"></canvas>
+        </div>
         <!-- <div class="original">{{ addArr }}</div> -->
     </div>
 </template>
@@ -26,6 +28,10 @@ function dra (arr) {
   var ratio = 20
   var diff = 10
   spa = can.width / arr.length
+  if (spa < 15) {
+    can.width = 15 * arr.length
+    spa = 15
+  }
   ratio = can.height / 18
   ctx.font = '14px Georgia'
   //   ctx.textAlign = 'center'
@@ -184,6 +190,10 @@ export default {
 }
 #canvas {
     border: solid 1px #ddd;
-    margin: 60px 0;
+}
+.canvasBox {
+    width: 1200px;
+    margin: 40px auto;
+    overflow-x: auto;
 }
 </style>
