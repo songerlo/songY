@@ -8,10 +8,19 @@
 </template>
 
 <script>
+import Create from './class/class1.js'
 export default {
   data () {
     return {
       s: ''
+    }
+  },
+  mounted () {
+    // var a = new Create(100, 100, '#333', '50%')
+    for (let i = 0; i < 100; i++) {
+      var a = new Create(Math.random() * 50, Math.random() * 50, '#333', '0%')
+      a.init()
+    //   requestAnimationFrame(a.render)
     }
   },
   methods: {
@@ -32,8 +41,11 @@ export default {
   }
 }
 </script>
-
 <style lang='scss' scoped>
+body {
+    width: 100%;
+    overflow: hidden;
+}
 .img-o {
     width: 1200px;
     margin: 0 auto;

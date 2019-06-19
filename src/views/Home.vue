@@ -28,6 +28,9 @@ export default {
     return {
       theme: this
     }
+  },
+  beforeMount () {
+    console.log(this.$plug)
   }
 }
 </script>

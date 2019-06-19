@@ -11,6 +11,7 @@
       <router-link to="/com">com</router-link> |
       <router-link to="/canvasChoose">canvasChoose</router-link> |
       <router-link to="/imgCanvas">imgCanvas</router-link> |
+      <router-link to="/twoColor">twoColorBall</router-link> |
     </div>
     <router-view/>
   </div>
